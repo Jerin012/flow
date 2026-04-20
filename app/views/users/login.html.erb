@@ -1,0 +1,85 @@
+<div class="login-page">
+  <div class="login-orb login-orb--one" aria-hidden="true"></div>
+  <div class="login-orb login-orb--two" aria-hidden="true"></div>
+
+  <header class="login-header">
+    <%= link_to root_path, class: "login-brand" do %>
+      <span class="login-brand__mark">DF</span>
+      <span class="login-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="login-header__actions">
+      <span class="login-header__label">Return to your rhythm</span>
+      <%= link_to "Create account", signup_path, class: "login-header__link" %>
+    </div>
+  </header>
+
+  <main class="login-main">
+    <section class="login-story">
+      <p class="login-kicker">Welcome Back</p>
+      <h1 class="login-title">Pick up where your best work left off.</h1>
+      <p class="login-subtitle">
+        Review your goals, enter a focused session, and keep your momentum steady
+        without rebuilding your routine from scratch.
+      </p>
+
+      <div class="login-insights" aria-label="Login page highlights">
+        <article class="insight-card">
+          <span class="insight-card__value">Sessions</span>
+          <span class="insight-card__label">Continue the work you already started.</span>
+        </article>
+        <article class="insight-card">
+          <span class="insight-card__value">Review</span>
+          <span class="insight-card__label">Reconnect with patterns from your recent focus blocks.</span>
+        </article>
+      </div>
+
+      <ul class="login-points">
+        <li>Resume your focus flow without extra setup.</li>
+        <li>See your recent progress before the next session begins.</li>
+        <li>Stay consistent with one account across every workday.</li>
+      </ul>
+    </section>
+
+    <section class="login-panel">
+      <div class="login-card">
+        <p class="login-card__eyebrow">Sign In</p>
+        <h2 class="login-card__title">Enter your workspace.</h2>
+        <p class="login-card__subtitle">Use your email and password to continue your focus routine.</p>
+
+        <% if flash[:alert] %>
+          <div class="flash flash--error"><%= flash[:alert] %></div>
+        <% end %>
+
+        <%= form_with url: login_path, scope: :user, local: true, class: "login-form" do |f| %>
+          <div class="form-group">
+            <%= f.label :email, "Email Address", class: "form-label" %>
+            <%= f.email_field :email,
+                placeholder: "name@example.com",
+                autocomplete: "email",
+                class: "form-input" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :password, "Password", class: "form-label" %>
+            <%= f.password_field :password,
+                placeholder: "Enter your password",
+                autocomplete: "current-password",
+                class: "form-input" %>
+          </div>
+
+          <p class="login-form__note">
+            Your progress stays attached to this account, so you can continue from any session.
+          </p>
+
+          <%= f.submit "Sign in", class: "btn-submit" %>
+        <% end %>
+
+        <p class="signup-prompt">
+          Need an account?
+          <%= link_to "Create one here", signup_path, class: "signup-prompt__link" %>
+        </p>
+      </div>
+    </section>
+  </main>
+</div>

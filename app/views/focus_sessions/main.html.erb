@@ -1,0 +1,141 @@
+<div class="focus-page">
+  <div class="focus-page__glow focus-page__glow--one" aria-hidden="true"></div>
+  <div class="focus-page__glow focus-page__glow--two" aria-hidden="true"></div>
+
+  <header class="focus-header">
+    <%= link_to main_path, class: "focus-brand" do %>
+      <span class="focus-brand__mark">DF</span>
+      <span class="focus-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="focus-header__meta">
+      <span class="focus-header__eyebrow">Planning Workspace</span>
+      <span class="focus-header__user"><%= current_user.name.presence || current_user.email %></span>
+    </div>
+  </header>
+
+  <main class="focus-shell">
+    <section class="focus-hero">
+      <p class="focus-kicker">Focus Session</p>
+      <h1 class="focus-title">Design the next block of uninterrupted work.</h1>
+      <p class="focus-copy">
+        Choose the subject, define the exact task, and calibrate your energy before
+        you enter a timed session. The clearer the setup, the calmer the execution.
+      </p>
+
+      <div class="focus-metrics">
+        <article class="focus-metric">
+          <span class="focus-metric__value"><%= @activity_metrics[:focus_sessions] %></span>
+          <span class="focus-metric__label">Focus plans created</span>
+        </article>
+        <article class="focus-metric">
+          <span class="focus-metric__value"><%= @activity_metrics[:activity_tracks] %></span>
+          <span class="focus-metric__label">Tracked sessions completed</span>
+        </article>
+        <article class="focus-metric">
+          <span class="focus-metric__value"><%= @activity_metrics[:average_energy] %></span>
+          <span class="focus-metric__label">Average starting energy</span>
+        </article>
+      </div>
+
+      <div class="focus-panel focus-panel--soft">
+        <p class="focus-panel__eyebrow">Preparation Checklist</p>
+        <ul class="focus-checklist">
+          <li>Start with one outcome you can finish in this block.</li>
+          <li>Use the topic field for the exact task, not a vague theme.</li>
+          <li>Set energy honestly so the session intensity matches reality.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="focus-workspace">
+      <div class="focus-card">
+        <p class="focus-card__eyebrow">Session Setup</p>
+        <h2 class="focus-card__title">Prepare the session.</h2>
+        <p class="focus-card__subtitle">This information becomes the frame for the timer and tracking flow.</p>
+
+        <% if @focus_session.errors.any? %>
+          <div class="focus-flash focus-flash--error">
+            <ul class="focus-error-list">
+              <% @focus_session.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @focus_session, url: focus_sessions_path, local: true, class: "focus-form" do |f| %>
+          <div class="focus-form__group">
+            <%= f.label :subject, "Subject", class: "focus-form__label" %>
+            <%= f.select :subject,
+                ["Engineering & Coding", "Design", "Writing", "Research", "Learning", "Operations"],
+                { prompt: "Choose a subject" },
+                { class: "focus-form__select" } %>
+          </div>
+
+          <div class="focus-form__group">
+            <%= f.label :topic, "Current Task", class: "focus-form__label" %>
+            <%= f.text_field :topic,
+                placeholder: "Refactor session tracking and finish the UI pass",
+                class: "focus-form__input" %>
+          </div>
+
+          <div class="focus-form__group">
+            <div class="focus-energy__header">
+              <%= f.label :energy_level, "Energy Level", class: "focus-form__label" %>
+              <span class="focus-energy__value" id="energy-display"><%= @focus_session.energy_level.presence || 3 %></span>
+            </div>
+            <%= f.range_field :energy_level,
+                min: 1, max: 5, value: (@focus_session.energy_level.presence || 3), step: 1,
+                class: "focus-form__range",
+                id: "energy-slider",
+                oninput: "document.getElementById('energy-display').textContent = this.value" %>
+            <div class="focus-energy__labels">
+              <span>Low</span>
+              <span>Medium</span>
+              <span>High</span>
+            </div>
+          </div>
+
+          <div class="focus-card__footer">
+            <p class="focus-card__note">You’ll set the timer length in the next step.</p>
+            <%= f.submit "Continue to tracking", class: "focus-form__submit" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="focus-side-stack">
+        <div class="focus-panel">
+          <p class="focus-panel__eyebrow">Current Strategy</p>
+          <div class="focus-strategy">
+            <div>
+              <span class="focus-strategy__label">Recommended duration</span>
+              <strong class="focus-strategy__value">25-45 min</strong>
+            </div>
+            <div>
+              <span class="focus-strategy__label">Best mode</span>
+              <strong class="focus-strategy__value">Single-task execution</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="focus-panel">
+          <p class="focus-panel__eyebrow">Recent Plans</p>
+          <% if @recent_focus_sessions.any? %>
+            <div class="focus-history">
+              <% @recent_focus_sessions.each do |session| %>
+                <article class="focus-history__item">
+                  <span class="focus-history__subject"><%= session.subject.presence || "Uncategorized" %></span>
+                  <strong class="focus-history__topic"><%= session.topic.presence || "Untitled session" %></strong>
+                  <span class="focus-history__meta">Energy <%= session.energy_level || "-" %></span>
+                </article>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="focus-empty">Your recent session plans will appear here after you create the first one.</p>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>

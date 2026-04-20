@@ -1,0 +1,81 @@
+<div class="track-page track-page--summary">
+  <div class="track-page__glow track-page__glow--one" aria-hidden="true"></div>
+  <div class="track-page__glow track-page__glow--two" aria-hidden="true"></div>
+
+  <header class="track-header">
+    <%= link_to main_path, class: "track-brand" do %>
+      <span class="track-brand__mark">DF</span>
+      <span class="track-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="track-header__actions">
+      <%= link_to "Start another session", main_path, class: "track-header__link" %>
+    </div>
+  </header>
+
+  <main class="track-summary-shell">
+    <section class="track-summary-hero">
+      <p class="track-kicker">Session Summary</p>
+      <h1 class="track-title"><%= @activity_track.title.presence || "Completed activity" %></h1>
+      <p class="track-copy">
+        Review how long the session ran, how much time counted as focused work,
+        and whether any away-time was marked as a break.
+      </p>
+    </section>
+
+    <section class="track-summary-grid">
+      <div class="track-summary-card">
+        <p class="track-panel__eyebrow">Key Results</p>
+        <div class="track-summary-metrics">
+          <article class="track-summary-metric">
+            <span class="track-summary-metric__value"><%= @activity_track.duration_minutes %> min</span>
+            <span class="track-summary-metric__label">Session duration</span>
+          </article>
+          <article class="track-summary-metric">
+            <span class="track-summary-metric__value"><%= @activity_track.total_focus_minutes.round %> min</span>
+            <span class="track-summary-metric__label">Focused time recorded</span>
+          </article>
+          <article class="track-summary-metric">
+            <span class="track-summary-metric__value"><%= (@session_data[:absenceLog] || []).size %></span>
+            <span class="track-summary-metric__label">Away-time events</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="track-summary-card">
+        <p class="track-panel__eyebrow">Timeline</p>
+        <div class="track-summary-list">
+          <div class="track-summary-list__row">
+            <span>Started</span>
+            <strong><%= @activity_track.start_time&.strftime("%b %d, %Y %I:%M %p") || "-" %></strong>
+          </div>
+          <div class="track-summary-list__row">
+            <span>Finished</span>
+            <strong><%= @activity_track.end_time&.strftime("%b %d, %Y %I:%M %p") || "-" %></strong>
+          </div>
+          <div class="track-summary-list__row">
+            <span>Tracked title</span>
+            <strong><%= @activity_track.title.presence || "-" %></strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="track-summary-card track-summary-card--wide">
+        <p class="track-panel__eyebrow">Absence Log</p>
+        <% if (@session_data[:absenceLog] || []).any? %>
+          <div class="track-summary-log">
+            <% @session_data[:absenceLog].each do |entry| %>
+              <article class="track-summary-log__item">
+                <span class="track-summary-log__type"><%= entry["type"] || entry[:type] || "unknown" %></span>
+                <span class="track-summary-log__duration"><%= ((entry["durationMs"] || entry[:durationMs]).to_i / 1000.0).round %> sec</span>
+              </article>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="track-empty">No away-time interruptions were recorded for this session.</p>
+        <% end %>
+      </div>
+
+    </section>
+  </main>
+</div>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Rflow" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Rflow">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+    <% if controller_name == "users" && action_name == "new" %>
+      <%= stylesheet_link_tag "signinlogin", "data-turbo-track": "reload" %>
+    <% end %>
+    <% if controller_name == "users" && action_name == "login" %>
+      <%= stylesheet_link_tag "login", "data-turbo-track": "reload" %>
+    <% end %>
+    <% if controller_name == "focus_sessions" && action_name == "main" %>
+      <%= stylesheet_link_tag "focussession", "data-turbo-track": "reload" %>
+    <% end %>
+    <% if controller_name == "activity_tracks" && %w[main_topic show].include?(action_name) %>
+      <%= stylesheet_link_tag "nocturne", "data-turbo-track": "reload" %>
+    <% end %>
+    <% if controller_name == "notes" %>
+      <%= stylesheet_link_tag "notes", "data-turbo-track": "reload" %>
+    <% end %>
+    <%= javascript_importmap_tags %>
+    <% if controller_name == "activity_tracks" && action_name == "main_topic" %>
+      <%= javascript_include_tag "nocturne", "data-turbo-track": "reload", defer: true %>
+    <% end %>
+  </head>
+
+  <body class="<%= "#{controller_name}-#{action_name}" %>">
+    <%= yield %>
+  </body>
+</html>

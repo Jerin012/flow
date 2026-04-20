@@ -1,0 +1,25 @@
+<div class="note-page">
+  <header class="note-header">
+    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <div class="note-header__actions">
+      <%= link_to "Edit", edit_note_path(@note), class: "note-btn note-btn--primary" %>
+      <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
+    </div>
+  </header>
+
+  <main class="note-shell">
+    <section class="note-hero">
+      <p class="note-kicker">Saved Note</p>
+      <h1 class="note-title"><%= @note.title %></h1>
+      <p class="note-copy">
+        <%= @note.focus_session&.topic.presence || "General note" %>
+        •
+        Updated <%= @note.updated_at.strftime("%b %d, %Y %I:%M %p") %>
+      </p>
+    </section>
+
+    <article class="note-view">
+      <%= simple_format(@note.content) %>
+    </article>
+  </main>
+</div>

@@ -1,0 +1,36 @@
+<div class="note-page">
+  <header class="note-header">
+    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <div class="note-header__actions">
+      <%= link_to "New note", new_note_path, class: "note-btn note-btn--primary" %>
+      <%= link_to "Back", main_path, class: "note-btn note-btn--secondary" %>    </div>
+  </header>
+
+  <main class="note-shell">
+    <section class="note-hero">
+      <p class="note-kicker">Notes</p>
+      <h1 class="note-title">Saved notes</h1>
+      <p class="note-copy">Every note you save is stored in the database and can be opened again any time.</p>
+    </section>
+
+    <section class="note-list">
+      <% if @notes.any? %>
+        <% @notes.each do |note| %>
+          <article class="note-card">
+            <p class="note-card__meta">
+              <%= note.focus_session&.topic.presence || "General note" %>
+            </p>
+            <h2 class="note-card__title"><%= note.title %></h2>
+            <p class="note-card__preview"><%= truncate(note.content, length: 180) %></p>
+            <div class="note-card__actions">
+              <%= link_to "Open", note_path(note), class: "note-btn note-btn--secondary" %>
+              <%= link_to "Edit", edit_note_path(note), class: "note-btn note-btn--secondary" %>
+            </div>
+          </article>
+        <% end %>
+      <% else %>
+        <p class="note-empty">No notes saved yet. Click "New note" to create the first one.</p>
+      <% end %>
+    </section>
+  </main>
+</div>

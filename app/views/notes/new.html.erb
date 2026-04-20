@@ -1,0 +1,22 @@
+<div class="note-page">
+  <header class="note-header">
+    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <div class="note-header__actions">
+      <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
+    </div>
+  </header>
+
+  <main class="note-shell">
+    <section class="note-hero">
+      <p class="note-kicker">Take Note</p>
+      <h1 class="note-title">Write and save your session note</h1>
+      <p class="note-copy">
+        This is a simple note page. Type what you need, click save, and the note will be stored in the database.
+      </p>
+    </section>
+
+    <section class="note-editor">
+      <%= render "form" %>
+    </section>
+  </main>
+</div>

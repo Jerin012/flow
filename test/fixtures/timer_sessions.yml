@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  title: MyString
+  start_time: 2026-04-13 17:08:58
+  end_time: 2026-04-13 17:08:58
+  total_focus_ms: 1
+  total_away_ms: 1
+
+two:
+  title: MyString
+  title: MyString
+  start_time: 2026-04-13 17:08:58
+  end_time: 2026-04-13 17:08:58
+  total_focus_ms: 1
+  total_away_ms: 1

@@ -1,0 +1,68 @@
+<div class="track-page">
+  <div class="track-page__glow track-page__glow--one" aria-hidden="true"></div>
+  <div class="track-page__glow track-page__glow--two" aria-hidden="true"></div>
+
+  <header class="track-header">
+    <%= link_to main_path, class: "track-brand" do %>
+      <span class="track-brand__mark">DF</span>
+      <span class="track-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="track-header__actions">
+      <span class="track-header__label">Live activity workspace</span>
+      <%= link_to "My notes", notes_path, class: "track-header__link" %>
+      <%= link_to "Plan another session", main_path, class: "track-header__link" %>
+    </div>
+  </header>
+
+  <main class="track-shell">
+    <section class="track-story">
+      <p class="track-kicker">Activity Tracking</p>
+      <h1 class="track-title"><%= @focus_session&.topic.presence || "Current focus block" %></h1>
+      <p class="track-copy">
+        Run a clean timed session, monitor your flow state, and save the result as a
+        usable activity record when the block is complete.
+      </p>
+
+      <div class="track-focus-card">
+        <div>
+          <span class="track-focus-card__label">Subject</span>
+          <strong class="track-focus-card__value"><%= @focus_session&.subject.presence || "Focused work" %></strong>
+        </div>
+        <div>
+          <span class="track-focus-card__label">Starting energy</span>
+          <strong class="track-focus-card__value"><%= @focus_session&.energy_level || 3 %>/5</strong>
+        </div>
+      </div>
+
+      <div class="track-panel">
+        <p class="track-panel__eyebrow">Session Guidance</p>
+        <ul class="track-guidance">
+          <li>Choose the shortest timer length that still lets you finish one meaningful chunk.</li>
+          <li>Use pause only for intentional breaks, not for routine context switching.</li>
+          <li>Finish the session to capture usable timing data and session notes.</li>
+        </ul>
+      </div>
+
+      <div class="track-panel">
+        <p class="track-panel__eyebrow">Recent Activity</p>
+        <% if @recent_activity_tracks.any? %>
+          <div class="track-history">
+            <% @recent_activity_tracks.each do |track| %>
+              <%= link_to activity_track_path(track), class: "track-history__item" do %>
+                <span class="track-history__title"><%= track.title.presence || "Untitled activity" %></span>
+                <span class="track-history__meta"><%= track.duration_minutes %> min tracked</span>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="track-empty">Completed activity summaries will appear here after your first timed session.</p>
+        <% end %>
+      </div>
+    </section>
+
+    <section class="track-workspace">
+      <%= render "activity_tracks/timer" %>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  duration_minutes: 1
+  start_time: 2026-04-14 16:55:15
+  end_time: 2026-04-14 16:55:15
+  total_focus_ms: 
+  session_data: 
+
+two:
+  title: MyString
+  duration_minutes: 1
+  start_time: 2026-04-14 16:55:15
+  end_time: 2026-04-14 16:55:15
+  total_focus_ms: 
+  session_data: 

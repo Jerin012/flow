@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  focus_session: one
+  category: MyString
+  occurred_at: 2026-04-08 15:30:53
+
+two:
+  focus_session: two
+  category: MyString
+  occurred_at: 2026-04-08 15:30:53

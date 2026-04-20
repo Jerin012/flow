@@ -1,0 +1,21 @@
+<div class="note-page">
+  <header class="note-header">
+    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <div class="note-header__actions">
+      <%= link_to "Open note", note_path(@note), class: "note-btn note-btn--secondary" %>
+      <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
+    </div>
+  </header>
+
+  <main class="note-shell">
+    <section class="note-hero">
+      <p class="note-kicker">Edit Note</p>
+      <h1 class="note-title"><%= @note.title %></h1>
+      <p class="note-copy">Update the content and save the changes back to the database.</p>
+    </section>
+
+    <section class="note-editor">
+      <%= render "form" %>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,114 @@
+<div class="signup-page">
+  <div class="signup-orb signup-orb--one" aria-hidden="true"></div>
+  <div class="signup-orb signup-orb--two" aria-hidden="true"></div>
+
+  <header class="signup-header">
+    <%= link_to root_path, class: "signup-brand" do %>
+      <span class="signup-brand__mark">DF</span>
+      <span class="signup-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="signup-header__actions">
+      <span class="signup-header__label">Built for deep work</span>
+      <%= link_to "Sign in", login_path, class: "signup-header__link" %>
+    </div>
+  </header>
+
+  <main class="signup-main">
+    <section class="signup-story">
+      <p class="signup-kicker">Focus Ritual</p>
+      <h1 class="signup-title">Stay consistent with your study flow.</h1>
+      <p class="signup-subtitle">
+        Create your account to plan focused sessions, review your patterns, and turn
+        scattered effort into deliberate progress.
+      </p>
+
+      <div class="signup-metrics" aria-label="Product highlights">
+        <article class="metric-card">
+          <span class="metric-card__value">25m</span>
+          <span class="metric-card__label">Guided focus blocks</span>
+        </article>
+        <article class="metric-card">
+          <span class="metric-card__value">Daily</span>
+          <span class="metric-card__label">Reflection-driven improvement</span>
+        </article>
+      </div>
+
+      <ul class="signup-points">
+        <li>Capture one clear intention before every session.</li>
+        <li>Track distractions without breaking your flow.</li>
+        <li>Review what moved forward at the end of the day.</li>
+      </ul>
+    </section>
+
+    <section class="signup-panel">
+      <div class="signup-card">
+        <p class="signup-card__eyebrow">Create Account</p>
+        <h2 class="signup-card__title">Start your focus system.</h2>
+        <p class="signup-card__subtitle">Set up your account and enter a calmer workflow.</p>
+
+        <% if flash[:alert] %>
+          <div class="flash flash--error"><%= flash[:alert] %></div>
+        <% end %>
+
+        <% if @user.errors.any? %>
+          <div class="flash flash--error">
+            <ul class="error-list">
+              <% @user.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @user, url: signup_path, local: true, class: "signup-form" do |f| %>
+          <div class="form-group">
+            <%= f.label :name, "Full Name", class: "form-label" %>
+            <%= f.text_field :name,
+                placeholder: "John Doe",
+                autocomplete: "name",
+                class: "form-input#{' form-input--error' if @user.errors[:name].any?}" %>
+          </div>
+
+          <div class="form-group">
+            <%= f.label :email, "Email Address", class: "form-label" %>
+            <%= f.email_field :email,
+                placeholder: "name@example.com",
+                autocomplete: "email",
+                class: "form-input#{' form-input--error' if @user.errors[:email].any?}" %>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <%= f.label :password, "Password", class: "form-label" %>
+              <%= f.password_field :password,
+                  placeholder: "Minimum 6 characters",
+                  autocomplete: "new-password",
+                  class: "form-input#{' form-input--error' if @user.errors[:password].any?}" %>
+                  
+            </div>
+
+            <div class="form-group">
+              <%= f.label :password_confirmation, "Confirm Password", class: "form-label" %>
+              <%= f.password_field :password_confirmation,
+                  placeholder: "Repeat password",
+                  autocomplete: "new-password",
+                  class: "form-input#{' form-input--error' if @user.errors[:password_confirmation].any?}" %>
+            </div>
+          </div>
+
+          <p class="signup-form__note">
+            By continuing, you’re creating your personal deep work space inside DeepFocus.
+          </p>
+
+          <%= f.submit "Create account", class: "btn-submit" %>
+        <% end %>
+
+        <p class="signin-link">
+          Already have an account?
+          <%= link_to "Sign in", login_path, class: "signin-link__anchor" %>
+        </p>
+      </div>
+    </section>
+  </main>
+</div>

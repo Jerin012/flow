@@ -1,0 +1,108 @@
+<div class="track-timer-card" id="nc-timer-card">
+  <div id="timer-setup" class="track-timer-setup">
+    <p class="track-timer-setup__eyebrow">Set Duration</p>
+    <h2 class="track-timer-setup__title">Start the focus block.</h2>
+    <p class="track-timer-setup__copy">Pick a realistic duration, then begin tracking with a single click.</p>
+
+    <div class="track-minutes-row">
+      <input
+        type="number"
+        id="minutes-input"
+        class="track-minutes-input"
+        min="1"
+        max="120"
+        value="25"
+        aria-label="Session minutes"
+      />
+      <span class="track-minutes-unit">minutes</span>
+    </div>
+
+    <div class="track-duration-presets" aria-label="Suggested durations">
+      <button type="button" class="track-duration-presets__item" onclick="document.getElementById('minutes-input').value = 15">15</button>
+      <button type="button" class="track-duration-presets__item" onclick="document.getElementById('minutes-input').value = 25">25</button>
+      <button type="button" class="track-duration-presets__item" onclick="document.getElementById('minutes-input').value = 45">45</button>
+    </div>
+
+    <button type="button" class="track-btn track-btn--primary" onclick="ncStartSession()">Start tracking</button>
+  </div>
+
+  <div id="timer-active" class="track-timer-active" style="display:none;">
+    <p class="track-timer-active__eyebrow">Time Remaining</p>
+    <div class="track-timer-display" id="timer-display">25:00</div>
+
+    <div class="track-timer-actions">
+      <button type="button" class="track-btn track-btn--secondary" id="pause-btn" onclick="ncTogglePause()">Pause Session</button>
+      <button type="button" class="track-btn track-btn--ghost" onclick="ncResetSession()">Reset</button>
+    </div>
+
+    <div class="track-progress">
+      <div class="track-progress__row">
+        <span>Live focus intensity</span>
+        <strong id="flow-pct">94%</strong>
+      </div>
+      <div class="track-progress__state" id="flow-state">STEADY</div>
+      <div class="track-flow-card" id="flow-card">
+        <canvas class="track-flow-card__canvas" id="flow-canvas"></canvas>
+        <div class="track-flow-card__timeline">
+          <span>00:00</span>
+          <span>NOW</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="track-support-card" id="nc-noise-card" style="display:none;">
+  <div>
+    <p class="track-support-card__eyebrow">Environment</p>
+    <strong class="track-support-card__title">Session mode active</strong>
+  </div>
+  <p class="track-support-card__copy">Notifications should stay quiet while this focus block is running.</p>
+</div>
+
+<div class="track-cta-row" id="nc-cta-row" style="display:none;">
+  <%= link_to "Take note", new_note_path(focus_session_id: @focus_session&.id), class: "track-btn track-btn--secondary track-btn--link", rel: "noopener" %>
+  <button type="button" class="track-btn track-btn--primary" id="finish-btn">Finish Session</button>
+</div>
+
+<div class="track-support-card track-support-card--insight" id="nc-insight" style="display:none;">
+  <p class="track-support-card__eyebrow">Focus Insight</p>
+  <p class="track-support-card__copy" id="insight-text">
+    Your heart rate variability indicates high focus. This is an ideal time for complex problem solving.
+  </p>
+</div>
+
+<%= form_with model: @activity_track, url: activity_tracking_path, local: true, id: "hidden-activity-form" do |f| %>
+  <%= hidden_field_tag :focus_session_id, @focus_session&.id %>
+  <%= f.hidden_field :title, value: (@focus_session&.topic.presence || "Untitled activity"), id: "form-title" %>
+  <%= f.hidden_field :duration_minutes, value: @focus_session&.duration_minutes, id: "form-duration" %>
+  <%= f.hidden_field :start_time, id: "form-start-time" %>
+  <%= f.hidden_field :end_time, id: "form-end-time" %>
+  <%= f.hidden_field :total_focus_ms, value: 0, id: "form-focus-ms" %>
+  <%= f.hidden_field :session_data, value: "{}", id: "form-session-data" %>
+  <%= f.submit "submit", id: "submit-trigger", style: "display:none;" %>
+<% end %>
+
+<div class="track-modal-backdrop" id="nc-backdrop">
+  <div class="track-modal" role="dialog" aria-modal="true">
+    <div class="track-modal__icon">⏳</div>
+    <h2 class="track-modal__title">You left the session</h2>
+    <p class="track-modal__copy">
+      You were away for <strong id="away-time">a moment</strong>. How should that time be counted?
+    </p>
+    <div class="track-modal__options">
+      <button type="button" class="track-modal__option track-modal__option--productive" onclick="ncHandleAbsence('work')">
+        <span class="track-modal__label">Work</span>
+        <span class="track-modal__desc">Count it as productive time completed outside this tab.</span>
+      </button>
+      <button type="button" class="track-modal__option track-modal__option--productive" onclick="ncHandleAbsence('browser')">
+        <span class="track-modal__label">Research</span>
+        <span class="track-modal__desc">Count it if you were doing work-related browsing or reading.</span>
+      </button>
+      <button type="button" class="track-modal__option track-modal__option--break" onclick="ncHandleAbsence('break')">
+        <span class="track-modal__label">Break</span>
+        <span class="track-modal__desc">Remove that time from the productive total.</span>
+      </button>
+    </div>
+  </div>
+</div>
