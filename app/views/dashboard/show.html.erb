@@ -1,0 +1,111 @@
+<div class="dashboard-page">
+  <div class="dashboard-page__glow dashboard-page__glow--one" aria-hidden="true"></div>
+  <div class="dashboard-page__glow dashboard-page__glow--two" aria-hidden="true"></div>
+
+  <header class="dashboard-header">
+    <%= link_to dashboard_path, class: "dashboard-brand" do %>
+      <span class="dashboard-brand__mark">DF</span>
+      <span class="dashboard-brand__text">DeepFocus</span>
+    <% end %>
+
+    <div class="dashboard-header__actions">
+      <%= link_to "Plan session", main_path, class: "dashboard-btn dashboard-btn--primary" %>
+      <%= link_to "Notes", notes_path, class: "dashboard-btn dashboard-btn--secondary" %>
+      <%= button_to "Logout", logout_path, method: :delete, class: "dashboard-btn dashboard-btn--ghost" %>
+    </div>
+  </header>
+
+  <main class="dashboard-shell">
+    <section class="dashboard-hero">
+      <p class="dashboard-kicker">Dashboard</p>
+      <h1 class="dashboard-title">Keep the next focus block obvious.</h1>
+      <p class="dashboard-copy">
+        Start from one place, resume active work if it exists, and review the notes and sessions
+        that matter without jumping between disconnected pages.
+      </p>
+
+      <div class="dashboard-metrics">
+        <article class="dashboard-metric">
+          <span class="dashboard-metric__value"><%= @stats[:focus_sessions] %></span>
+          <span class="dashboard-metric__label">Completed focus sessions</span>
+        </article>
+        <article class="dashboard-metric">
+          <span class="dashboard-metric__value"><%= @stats[:tracked_minutes] %></span>
+          <span class="dashboard-metric__label">Tracked minutes saved</span>
+        </article>
+        <article class="dashboard-metric">
+          <span class="dashboard-metric__value"><%= @stats[:active_notes] %></span>
+          <span class="dashboard-metric__label">Available notes</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="dashboard-main">
+      <div class="dashboard-card dashboard-card--highlight">
+        <p class="dashboard-card__eyebrow">Current Session</p>
+        <% if @active_focus_session.present? %>
+          <h2 class="dashboard-card__title"><%= @active_focus_session.topic.presence || "Active focus block" %></h2>
+          <p class="dashboard-card__copy">
+            <%= @active_focus_session.subject.presence || "Focused work" %>
+            •
+            <%= @active_focus_session.status.humanize %>
+          </p>
+          <div class="dashboard-card__actions">
+            <%= link_to "Resume session", activity_tracking_path(focus_session_id: @active_focus_session.id), class: "dashboard-btn dashboard-btn--primary" %>
+            <%= link_to "View notes", notes_path, class: "dashboard-btn dashboard-btn--secondary" %>
+          </div>
+        <% else %>
+          <h2 class="dashboard-card__title">No active session</h2>
+          <p class="dashboard-card__copy">Create a plan first, then the timer page can be resumed from here if the browser closes.</p>
+          <div class="dashboard-card__actions">
+            <%= link_to "Start a new session", main_path, class: "dashboard-btn dashboard-btn--primary" %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="dashboard-grid">
+        <section class="dashboard-card">
+          <p class="dashboard-card__eyebrow">Recent Activity</p>
+          <% if @recent_activity_tracks.any? %>
+            <div class="dashboard-activity-panel">
+              <div class="dashboard-list dashboard-list--scroll">
+                <% @recent_activity_tracks.each do |track| %>
+                  <%= link_to activity_track_path(track), class: "dashboard-list__item dashboard-list__item--row dashboard-list__item--link" do %>
+                    <strong><%= track.title.presence || "Tracked session" %></strong>
+                    <span><%= track.duration_minutes %> min • <%= track.created_at.strftime("%b %d") %></span>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+            <% if @recent_activity_tracks.size > 3 %>
+              <p class="dashboard-scroll-hint">Showing the latest 3 first. Scroll to see older activity.</p>
+            <% end %>
+          <% else %>
+            <p class="dashboard-empty">Completed tracking summaries will appear after the first finished session.</p>
+          <% end %>
+        </section>
+
+        <section class="dashboard-card">
+          <p class="dashboard-card__eyebrow">Recent Notes</p>
+          <% if @recent_notes.any? %>
+            <div class="dashboard-activity-panel">
+              <div class="dashboard-list dashboard-list--scroll">
+                <% @recent_notes.each do |note| %>
+                  <%= link_to note_path(note), class: "dashboard-list__item dashboard-list__item--row dashboard-list__item--link" do %>
+                    <strong><%= note.title %></strong>
+                    <span><%= note.focus_session&.topic.presence || "General note" %></span>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+            <% if @recent_notes.size > 3 %>
+              <p class="dashboard-scroll-hint">Latest 3 are visible first. Scroll to see older notes.</p>
+            <% end %>
+          <% else %>
+            <p class="dashboard-empty">Session notes saved from the timer will appear here for quick review.</p>
+          <% end %>
+        </section>
+      </div>
+    </section>
+  </main>
+</div>

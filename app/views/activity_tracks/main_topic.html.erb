@@ -3,13 +3,14 @@
   <div class="track-page__glow track-page__glow--two" aria-hidden="true"></div>
 
   <header class="track-header">
-    <%= link_to main_path, class: "track-brand" do %>
+    <%= link_to dashboard_path, class: "track-brand" do %>
       <span class="track-brand__mark">DF</span>
       <span class="track-brand__text">DeepFocus</span>
     <% end %>
 
     <div class="track-header__actions">
       <span class="track-header__label">Live activity workspace</span>
+      <%= link_to "Dashboard", dashboard_path, class: "track-header__link" %>
       <%= link_to "My notes", notes_path, class: "track-header__link" %>
       <%= link_to "Plan another session", main_path, class: "track-header__link" %>
     </div>
@@ -47,14 +48,19 @@
       <div class="track-panel">
         <p class="track-panel__eyebrow">Recent Activity</p>
         <% if @recent_activity_tracks.any? %>
-          <div class="track-history">
-            <% @recent_activity_tracks.each do |track| %>
-              <%= link_to activity_track_path(track), class: "track-history__item" do %>
-                <span class="track-history__title"><%= track.title.presence || "Untitled activity" %></span>
-                <span class="track-history__meta"><%= track.duration_minutes %> min tracked</span>
+          <div class="track-history-panel">
+            <div class="track-history track-history--scroll">
+              <% @recent_activity_tracks.each do |track| %>
+                <%= link_to activity_track_path(track), class: "track-history__item track-history__item--row" do %>
+                  <span class="track-history__title"><%= track.title.presence || "Untitled activity" %></span>
+                  <span class="track-history__meta"><%= track.duration_minutes %> min tracked</span>
+                <% end %>
               <% end %>
-            <% end %>
+            </div>
           </div>
+          <% if @recent_activity_tracks.size > 3 %>
+            <p class="track-scroll-hint">Latest 3 are visible first. Scroll for older sessions.</p>
+          <% end %>
         <% else %>
           <p class="track-empty">Completed activity summaries will appear here after your first timed session.</p>
         <% end %>

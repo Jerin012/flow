@@ -9,8 +9,13 @@
   </div>
 <% end %>
 
+<% if flash[:notice].present? %>
+  <div class="note-flash note-flash--success"><%= flash[:notice] %></div>
+<% end %>
+
 <%= form_with model: @note, local: true, class: "note-form" do |f| %>
   <%= f.hidden_field :focus_session_id %>
+  <%= hidden_field_tag :return_to, @return_to if defined?(@return_to) && @return_to.present? %>
 
   <div class="note-form__group">
     <%= f.label :title, class: "note-form__label" %>
@@ -23,7 +28,11 @@
   </div>
 
   <div class="note-form__actions">
-    <%= f.submit class: "note-btn note-btn--primary" %>
-    <%= link_to "Back to notes", notes_path, class: "note-btn note-btn--secondary" %>
+    <%= f.submit(@note.persisted? ? "Save changes" : "Save note", class: "note-btn note-btn--primary") %>
+    <% if defined?(@return_to) && @return_to.present? %>
+      <%= link_to "Back to timer", @return_to, class: "note-btn note-btn--secondary" %>
+    <% else %>
+      <%= link_to "Back to notes", notes_path, class: "note-btn note-btn--secondary" %>
+    <% end %>
   </div>
 <% end %>

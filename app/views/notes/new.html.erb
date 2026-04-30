@@ -1,7 +1,11 @@
 <div class="note-page">
   <header class="note-header">
-    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <%= link_to "DeepFocus", dashboard_path, class: "note-brand" %>
     <div class="note-header__actions">
+      <% if @return_to.present? %>
+        <%= link_to "Back to timer", @return_to, class: "note-btn note-btn--primary" %>
+      <% end %>
+      <%= link_to "Dashboard", dashboard_path, class: "note-btn note-btn--secondary" %>
       <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
     </div>
   </header>
@@ -9,9 +13,13 @@
   <main class="note-shell">
     <section class="note-hero">
       <p class="note-kicker">Take Note</p>
-      <h1 class="note-title">Write and save your session note</h1>
+      <h1 class="note-title"><%= @focus_session&.topic.presence || "Record What You Learned Today" %></h1>
       <p class="note-copy">
-        This is a simple note page. Type what you need, click save, and the note will be stored in the database.
+        <% if @return_to.present? %>
+          Your timer keeps running while you write here. Save the note, then jump back to the live session whenever you want.
+        <% else %>
+          Capture learning moments before they slip away. Write it once, learn from it forever.
+        <% end %>
       </p>
     </section>
 

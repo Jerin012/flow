@@ -1,4 +1,12 @@
-<div class="track-timer-card" id="nc-timer-card">
+<div
+  class="track-timer-card"
+  id="nc-timer-card"
+  data-focus-session-id="<%= @focus_session&.id %>"
+  data-activate-url="<%= @focus_session ? activate_focus_session_path(@focus_session) : "" %>"
+  data-sync-url="<%= @focus_session ? sync_state_focus_session_path(@focus_session) : "" %>"
+  data-reset-url="<%= @focus_session ? reset_state_focus_session_path(@focus_session) : "" %>"
+  data-resume-state="<%= json_escape((@timer_resume_payload || {}).to_json) %>"
+>
   <div id="timer-setup" class="track-timer-setup">
     <p class="track-timer-setup__eyebrow">Set Duration</p>
     <h2 class="track-timer-setup__title">Start the focus block.</h2>
@@ -61,7 +69,10 @@
 </div>
 
 <div class="track-cta-row" id="nc-cta-row" style="display:none;">
-  <%= link_to "Take note", new_note_path(focus_session_id: @focus_session&.id), class: "track-btn track-btn--secondary track-btn--link", rel: "noopener" %>
+  <%= link_to "Take note",
+      focus_session_note_path(@focus_session, return_to: activity_tracking_path(focus_session_id: @focus_session.id)),
+      class: "track-btn track-btn--secondary",
+      id: "take-note-btn" %>
   <button type="button" class="track-btn track-btn--primary" id="finish-btn">Finish Session</button>
 </div>
 
@@ -71,6 +82,8 @@
     Your heart rate variability indicates high focus. This is an ideal time for complex problem solving.
   </p>
 </div>
+
+<div class="track-sync-status" id="nc-sync-status" aria-live="polite"></div>
 
 <%= form_with model: @activity_track, url: activity_tracking_path, local: true, id: "hidden-activity-form" do |f| %>
   <%= hidden_field_tag :focus_session_id, @focus_session&.id %>

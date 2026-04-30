@@ -25,8 +25,11 @@
     <% if controller_name == "users" && action_name == "login" %>
       <%= stylesheet_link_tag "login", "data-turbo-track": "reload" %>
     <% end %>
-    <% if controller_name == "focus_sessions" && action_name == "main" %>
+    <% if controller_name == "focus_sessions" && %w[main new].include?(action_name) %>
       <%= stylesheet_link_tag "focussession", "data-turbo-track": "reload" %>
+    <% end %>
+    <% if controller_name == "dashboard" %>
+      <%= stylesheet_link_tag "dashboard", "data-turbo-track": "reload" %>
     <% end %>
     <% if controller_name == "activity_tracks" && %w[main_topic show].include?(action_name) %>
       <%= stylesheet_link_tag "nocturne", "data-turbo-track": "reload" %>

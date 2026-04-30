@@ -1,9 +1,12 @@
 <div class="note-page">
   <header class="note-header">
-    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <%= link_to "DeepFocus", dashboard_path, class: "note-brand" %>
     <div class="note-header__actions">
+      <%= link_to "Dashboard", dashboard_path, class: "note-btn note-btn--secondary" %>
+      <%= link_to "Recycle Bin", recycle_bin_notes_path, class: "note-btn note-btn--secondary" %>
       <%= link_to "New note", new_note_path, class: "note-btn note-btn--primary" %>
-      <%= link_to "Back", main_path, class: "note-btn note-btn--secondary" %>    </div>
+      <%= link_to "Back", main_path, class: "note-btn note-btn--secondary" %>
+    </div>
   </header>
 
   <main class="note-shell">
@@ -25,6 +28,7 @@
             <div class="note-card__actions">
               <%= link_to "Open", note_path(note), class: "note-btn note-btn--secondary" %>
               <%= link_to "Edit", edit_note_path(note), class: "note-btn note-btn--secondary" %>
+              <%= render "delete_button", note: note %>
             </div>
           </article>
         <% end %>

@@ -1,0 +1,52 @@
+<div class="note-page">
+  <header class="note-header">
+    <%= link_to "DeepFocus", dashboard_path, class: "note-brand" %>
+    <div class="note-header__actions">
+      <%= link_to "Dashboard", dashboard_path, class: "note-btn note-btn--secondary" %>
+      <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
+      <%= link_to "Back", main_path, class: "note-btn note-btn--secondary" %>
+    </div>
+  </header>
+
+  <main class="note-shell">
+    <section class="note-hero">
+      <p class="note-kicker">Recycle Bin</p>
+      <h1 class="note-title">Deleted notes</h1>
+      <p class="note-copy">Notes moved here can be restored later or removed permanently.</p>
+    </section>
+
+    <section class="note-list">
+      <% if @deleted_notes.any? %>
+        <% @deleted_notes.each do |note| %>
+          <article class="note-card">
+            <p class="note-card__meta">
+              <%= note.focus_session&.topic.presence || "General note" %>
+            </p>
+            <h2 class="note-card__title"><%= note.title %></h2>
+            <p class="note-card__preview"><%= truncate(note.content, length: 180) %></p>
+            <p class="note-card__status">
+              Deleted <%= note.deleted_at.strftime("%b %d, %Y %I:%M %p") %>
+            </p>
+            <div class="note-card__actions">
+              <%= button_to "Restore",
+                  restore_note_path(note),
+                  method: :patch,
+                  class: "note-btn note-btn--primary" %>
+              <%= button_to "Delete forever",
+                  destroy_forever_note_path(note),
+                  method: :delete,
+                  class: "note-btn note-btn--danger",
+                  form: {
+                    data: {
+                      turbo_confirm: "Permanently delete this note? This action cannot be undone."
+                    }
+                  } %>
+            </div>
+          </article>
+        <% end %>
+      <% else %>
+        <p class="note-empty">Recycle Bin is empty. Deleted notes will appear here until you remove them forever.</p>
+      <% end %>
+    </section>
+  </main>
+</div>

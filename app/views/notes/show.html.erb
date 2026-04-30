@@ -1,8 +1,13 @@
 <div class="note-page">
   <header class="note-header">
-    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <%= link_to "DeepFocus", dashboard_path, class: "note-brand" %>
     <div class="note-header__actions">
-      <%= link_to "Edit", edit_note_path(@note), class: "note-btn note-btn--primary" %>
+      <% if params[:return_to].to_s.start_with?("/") %>
+        <%= link_to "Back to timer", params[:return_to], class: "note-btn note-btn--primary" %>
+      <% end %>
+      <%= link_to "Dashboard", dashboard_path, class: "note-btn note-btn--secondary" %>
+      <%= render "delete_button", note: @note %>
+      <%= link_to "Edit", edit_note_path(@note, return_to: params[:return_to]), class: "note-btn note-btn--primary" %>
       <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
     </div>
   </header>

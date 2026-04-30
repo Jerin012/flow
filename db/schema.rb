@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_17_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_24_120000) do
   create_table "activity_tracks", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "duration_minutes"
@@ -49,23 +49,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_17_120000) do
     t.datetime "created_at", null: false
     t.float "deep_work_score"
     t.integer "duration_minutes"
+    t.bigint "elapsed_break_ms", default: 0, null: false
+    t.bigint "elapsed_focus_ms", default: 0, null: false
     t.datetime "ended_at"
     t.integer "energy_level"
+    t.datetime "last_synced_at"
+    t.integer "planned_duration_minutes"
+    t.text "session_data"
     t.datetime "started_at"
+    t.string "status", default: "draft", null: false
     t.string "subject"
     t.string "topic"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["status"], name: "index_focus_sessions_on_status"
     t.index ["user_id"], name: "index_focus_sessions_on_user_id"
   end
 
   create_table "notes", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.text "content", null: false
     t.datetime "created_at", null: false
+    t.datetime "deleted_at"
     t.bigint "focus_session_id"
     t.string "title", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.index ["deleted_at"], name: "index_notes_on_deleted_at"
     t.index ["focus_session_id"], name: "index_notes_on_focus_session_id"
     t.index ["user_id"], name: "index_notes_on_user_id"
   end

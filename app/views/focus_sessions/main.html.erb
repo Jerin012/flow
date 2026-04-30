@@ -3,7 +3,7 @@
   <div class="focus-page__glow focus-page__glow--two" aria-hidden="true"></div>
 
   <header class="focus-header">
-    <%= link_to main_path, class: "focus-brand" do %>
+    <%= link_to dashboard_path, class: "focus-brand" do %>
       <span class="focus-brand__mark">DF</span>
       <span class="focus-brand__text">DeepFocus</span>
     <% end %>
@@ -74,9 +74,9 @@
           </div>
 
           <div class="focus-form__group">
-            <%= f.label :topic, "Current Task", class: "focus-form__label" %>
+            <%= f.label :topic, "Current Topic", class: "focus-form__label" %>
             <%= f.text_field :topic,
-                placeholder: "Refactor session tracking and finish the UI pass",
+                placeholder: "Add your current learning topic",
                 class: "focus-form__input" %>
           </div>
 

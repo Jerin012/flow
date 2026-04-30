@@ -1,8 +1,12 @@
 <div class="note-page">
   <header class="note-header">
-    <%= link_to "DeepFocus", main_path, class: "note-brand" %>
+    <%= link_to "DeepFocus", dashboard_path, class: "note-brand" %>
     <div class="note-header__actions">
-      <%= link_to "Open note", note_path(@note), class: "note-btn note-btn--secondary" %>
+      <% if @return_to.present? %>
+        <%= link_to "Back to timer", @return_to, class: "note-btn note-btn--primary" %>
+      <% end %>
+      <%= link_to "Dashboard", dashboard_path, class: "note-btn note-btn--secondary" %>
+      <%= link_to "Open note", note_path(@note, return_to: @return_to), class: "note-btn note-btn--secondary" %>
       <%= link_to "All notes", notes_path, class: "note-btn note-btn--secondary" %>
     </div>
   </header>
@@ -11,7 +15,13 @@
     <section class="note-hero">
       <p class="note-kicker">Edit Note</p>
       <h1 class="note-title"><%= @note.title %></h1>
-      <p class="note-copy">Update the content and save the changes back to the database.</p>
+      <p class="note-copy">
+        <% if @return_to.present? %>
+          Update the note while the timer keeps running, then return to the live session when you are ready.
+        <% else %>
+          Update the content and save the changes back to the database.
+        <% end %>
+      </p>
     </section>
 
     <section class="note-editor">
