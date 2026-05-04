@@ -21,4 +21,4 @@ Things you may want to cover:
 * Deployment instructions
 
 
-📄 Download PDF: [Click here](notes.clas1.1drawio.pdf)
+📄 Download class uml diagram PDF: [Click here](clas1.1drawio.pdf)
